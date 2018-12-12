@@ -24,6 +24,7 @@
         <attr name="compactCalendarMultiEventIndicatorColor" format="color"/>
         <attr name="compactCalendarTargetHeight" format="dimension"/>
         <attr name="compactCalendarEventIndicatorStyle"/>
+        <attr name="compactCalendarOtherMonthDaysTextColor" format="color"/>
         <attr name="compactCalendarCurrentDayIndicatorStyle"/>
         <attr name="compactCalendarCurrentSelectedDayIndicatorStyle"/>
         <attr name="compactCalendarDisplayOtherMonthDays" format="boolean"/>
