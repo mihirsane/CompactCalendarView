@@ -51,6 +51,7 @@ class CompactCalendarController {
     private int monthsScrolledSoFar;
     private int heightPerDay;
     private int textSize = 30;
+    private int headerTextSize = 30;
     private int width;
     private int height;
     private int paddingRight;
@@ -79,6 +80,7 @@ class CompactCalendarController {
     private boolean displayOtherMonthDays = false;
     private boolean shouldSelectFirstDayOfMonthOnScroll = true;
     private boolean isRtl = false;
+    private Typeface dateFont;
 
     private CompactCalendarViewListener listener;
     private VelocityTracker velocityTracker = null;
@@ -101,6 +103,7 @@ class CompactCalendarController {
     private int multiEventIndicatorColor;
     private int currentDayBackgroundColor;
     private int currentDayTextColor;
+    private int headerTextColor = Color.BLACK;;
     private int calenderTextColor;
     private int currentSelectedDayBackgroundColor;
     private int currentSelectedDayTextColor;
@@ -160,9 +163,12 @@ class CompactCalendarController {
                 currentSelectedDayIndicatorStyle = typedArray.getInt(R.styleable.CompactCalendarView_compactCalendarCurrentSelectedDayIndicatorStyle, FILL_LARGE_INDICATOR);
                 displayOtherMonthDays = typedArray.getBoolean(R.styleable.CompactCalendarView_compactCalendarDisplayOtherMonthDays, displayOtherMonthDays);
                 shouldSelectFirstDayOfMonthOnScroll = typedArray.getBoolean(R.styleable.CompactCalendarView_compactCalendarShouldSelectFirstDayOfMonthOnScroll, shouldSelectFirstDayOfMonthOnScroll);
-            } finally {
-                typedArray.recycle();
-            }
+                headerTextColor = typedArray.getColor(R.styleable.CompactCalendarView_compactCalendarHeaderColor, headerTextColor);
+                headerTextSize = typedArray.getDimensionPixelSize(R.styleable.CompactCalendarView_compactCalendarHeaderTextSize,
+                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, headerTextSize, context.getResources().getDisplayMetrics()));
+                } finally {
+                    typedArray.recycle();
+                }
         }
     }
 
@@ -915,7 +921,7 @@ class CompactCalendarController {
                     dayPaint.setColor(calenderTextColor);
                     dayPaint.setTypeface(Typeface.DEFAULT_BOLD);
                     dayPaint.setStyle(Paint.Style.FILL);
-                    dayPaint.setColor(calenderTextColor);
+                    dayPaint.setTextSize(headerTextSize);
                     canvas.drawText(dayColumnNames[colDirection], xPosition, paddingHeight, dayPaint);
                     dayPaint.setTypeface(Typeface.DEFAULT);
                 }
