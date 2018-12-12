@@ -80,7 +80,8 @@ class CompactCalendarController {
     private boolean displayOtherMonthDays = false;
     private boolean shouldSelectFirstDayOfMonthOnScroll = true;
     private boolean isRtl = false;
-    private Typeface dateFont;
+    private String dateFont;
+    private String headerFont;
 
     private CompactCalendarViewListener listener;
     private VelocityTracker velocityTracker = null;
@@ -110,6 +111,8 @@ class CompactCalendarController {
     private int calenderBackgroundColor = Color.WHITE;
     private int otherMonthDaysTextColor;
     private TimeZone timeZone;
+    Typeface dateTypeface;
+    Typeface headerTypeface;
 
     /**
      * Only used in onDrawCurrentMonth to temporarily calculate previous month days
@@ -166,6 +169,8 @@ class CompactCalendarController {
                 headerTextColor = typedArray.getColor(R.styleable.CompactCalendarView_compactCalendarHeaderColor, headerTextColor);
                 headerTextSize = typedArray.getDimensionPixelSize(R.styleable.CompactCalendarView_compactCalendarHeaderTextSize,
                         (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, headerTextSize, context.getResources().getDisplayMetrics()));
+                dateFont =  typedArray.getString(R.styleable.CompactCalendarView_compactCalendarDateFont);
+                headerFont =  typedArray.getString(R.styleable.CompactCalendarView_compactCalendarHeaderFont);
                 } finally {
                     typedArray.recycle();
                 }
@@ -193,6 +198,19 @@ class CompactCalendarController {
         dayPaint.setStyle(Paint.Style.STROKE);
         dayPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
         dayPaint.setTypeface(Typeface.SANS_SERIF);
+        if (dateFont!=null) {
+            dateTypeface = Typeface.createFromAsset(
+                    context.getAssets(),
+                    dateFont);
+            dayPaint.setTypeface(dateTypeface);
+        }
+
+        if (headerFont!=null){
+            headerTypeface = Typeface.createFromAsset(
+                    context.getAssets(),
+                    headerFont);
+        }
+
         dayPaint.setTextSize(textSize);
         dayPaint.setColor(calenderTextColor);
         dayPaint.getTextBounds("31", 0, "31".length(), textSizeRect);
@@ -918,14 +936,22 @@ class CompactCalendarController {
             if (dayRow == 0) {
                 // first row, so draw the first letter of the day
                 if (shouldDrawDaysHeader) {
-                    dayPaint.setColor(calenderTextColor);
-                    dayPaint.setTypeface(Typeface.DEFAULT_BOLD);
+                    dayPaint.setColor(headerTextColor);
+                    if (headerTypeface!=null) {
+                        dayPaint.setTypeface(headerTypeface);
+                    }
                     dayPaint.setStyle(Paint.Style.FILL);
                     dayPaint.setTextSize(headerTextSize);
                     canvas.drawText(dayColumnNames[colDirection], xPosition, paddingHeight, dayPaint);
-                    dayPaint.setTypeface(Typeface.DEFAULT);
+
+
                 }
             } else {
+                dayPaint.setTextSize(textSize);
+                dayPaint.setTypeface(Typeface.DEFAULT);
+                if (dateTypeface!=null) {
+                    dayPaint.setTypeface(dateTypeface);
+                }
                 int day = ((dayRow - 1) * 7 + colDirection + 1) - firstDayOfMonth;
                 int defaultCalenderTextColorToUse = calenderTextColor;
                 if (currentCalender.get(Calendar.DAY_OF_MONTH) == day && isSameMonthAsCurrentCalendar && !isAnimatingWithExpose) {

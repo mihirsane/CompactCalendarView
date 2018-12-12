@@ -32,6 +32,8 @@
         <attr name="compactCalendarTextFont" format="integer"/>
         <attr name="compactCalendarHeaderColor" format="color"/>
         <attr name="compactCalendarHeaderTextSize" format="dimension"/>
+        <attr name="compactCalendarHeaderFont" format="string"/>
+        <attr name="compactCalendarDateFont" format="string"/>
 
     </declare-styleable>
 </resources>
